@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from api import serializers
-from api import models
+from rest_framework.response import Response
+from api import models, serializers
 
 class ItemViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ItemSerializer
@@ -13,3 +13,9 @@ class OrderViewSet(viewsets.ModelViewSet):
 class CustomerViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.CustomerSerializer
     queryset = models.Customer.objects.all()
+
+    def create(self, request):
+        customer = models.Customer.objects.create(name=request.data['name'])
+        customer.save()
+        return Response(serializers.CustomerSerializer(customer).data)
+ 
