@@ -14,5 +14,4 @@ class Order(models.Model):
     id = models.AutoField(primary_key=True, editable=False)
     code = models.CharField(max_length=50)
     data = models.DateField()
-    customer_id = models.ForeignKey(Customer, on_delete=models.DO_NOTHING, null=False)
-
+    customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING, null=False)
