@@ -1,0 +1,1 @@
+# this file is necessary for run command makemigrations
