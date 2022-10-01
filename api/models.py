@@ -20,3 +20,4 @@ class Order(models.Model):
 class ItemOrder(models.Model):
     item = models.ForeignKey(Item, models.DO_NOTHING)
     order = models.ForeignKey(Order, models.DO_NOTHING)
+    quantity = models.PositiveIntegerField(null=False)
