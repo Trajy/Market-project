@@ -10,6 +10,10 @@ class OrderViewSet(ModelViewSet):
     serializer_class = serializers.OrderSerializer
     queryset = models.Order.objects.all()
 
+class ItemOrderViewSet(ModelViewSet):
+    serializer_class = serializers.OrderSerializer
+    queryset = models.Order.objects.all()
+
 class CustomerViewSet(ModelViewSet):
     serializer_class = serializers.CustomerSerializer
     queryset = models.Customer.objects.all()
