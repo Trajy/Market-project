@@ -19,10 +19,10 @@ from api import viewsets
 from rest_framework import routers
 
 route = routers.DefaultRouter()
-route.register(r'items', viewsets.ItemViewSet, basename='Items')
-route.register(r'orders', viewsets.OrderViewSet, basename='Orders')
-route.register(r'itemOrder', viewsets.ItemOrderViewSet, basename='ItemOrder')
-route.register(r'customers', viewsets.CustomerViewSet, basename='Customers')
+route.register(r'items', viewsets.ItemViewSet, basename='items')
+route.register(r'orders', viewsets.OrderViewSet, basename='0rders')
+route.register(r'itemOrder', viewsets.ItemOrderViewSet, basename='items-orders')
+route.register(r'customers', viewsets.CustomerViewSet, basename='customers')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
