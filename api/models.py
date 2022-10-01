@@ -1,4 +1,5 @@
 from pyexpat import model
+from unittest.util import _MAX_LENGTH
 from django.db import models
 
 class Customer(models.Model):
@@ -10,6 +11,7 @@ class Item(models.Model):
     id = models.AutoField(primary_key=True, editable=False)
     name = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=5, decimal_places=2)
+    rfid = models.CharField(max_length=12)
 
 class Order(models.Model):
     id = models.AutoField(primary_key=True, editable=False)
