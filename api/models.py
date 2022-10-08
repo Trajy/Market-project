@@ -16,6 +16,7 @@ class Order(models.Model):
     code = models.CharField(max_length=50)
     data = models.DateField()
     customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING, null=False)
+    status = models.CharField(max_length=10 ,null=False)
 
 class ItemOrder(models.Model):
     item = models.ForeignKey(Item, models.DO_NOTHING)
