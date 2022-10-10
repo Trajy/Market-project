@@ -9,7 +9,7 @@ class Item(models.Model):
     id = models.AutoField(primary_key=True, editable=False)
     name = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=5, decimal_places=2)
-    rfid = models.CharField(max_length=12)
+    rfid = models.CharField(max_length=12, unique=True)
 
 class Order(models.Model):
     id = models.AutoField(primary_key=True, editable=False)
