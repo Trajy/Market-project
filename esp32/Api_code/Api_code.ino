@@ -1,4 +1,5 @@
 #include <WiFi.h>
+#include <SoftwareSerial.h>
 
 #define ID_ARDUINO 4
 #define TAG_PEDIDO_CANCELADO ""
@@ -9,6 +10,7 @@
 const char* ssid = "";
 const char* password = "";
 HTTPClient http;
+SoftwareSerial rfid(5,4); // (RX, TX)
 
 void sendRequest(String body, String path) {
     //chama a api de inicio de pedido
@@ -29,6 +31,17 @@ void sendRequest(String body, String path) {
     }
 }
 
+String lerTag() {
+    String tag = ""; 
+    while (RFID.available() > 0) {
+    delay(5);
+      tag += RFID.read();
+    }
+    if (tag.length() > 11) {
+      return tag;
+    }
+}
+
 void setup() {
     pinMode (LED_BUILTIN, OUTPUT);
     Serial.begin(115200);
@@ -42,7 +55,10 @@ void setup() {
 }
 
 void loop() {
-    String tag = "";
+    if(while (RFID.available() <= 0) {
+      return;
+    }
+    String tag = lerTag();
     Serial.println("Tag : " + tag);
     String body;
     String path;
