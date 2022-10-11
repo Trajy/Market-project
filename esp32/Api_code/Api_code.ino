@@ -1,4 +1,5 @@
 #include <WiFi.h>
+#include <HTTPClient.h>
 #include <SoftwareSerial.h>
 
 #define ID_ARDUINO 4
