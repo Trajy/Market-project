@@ -55,8 +55,9 @@ void loop() {
       path = "/orders/"
     }
     else {
-        
+        body = "{\"rfid\":\"" + tag + ",\"customer\":\"" + ID_ARDUINO + "\"}";
+        path = "/items-orders/"
     }
-    sendRequest(body, "/orders/");
+    sendRequest(body, path);
     delay(1000);
 }
