@@ -20,7 +20,7 @@ class ItemOrderViewSet(ModelViewSet):
         items = models.Item.objects.filter(rfid__icontains=request.data['rfid'])
         orders = models.Order.objects.filter(status__exact='COMPRANDO', customer__exact=request.data['customer'])
         if not(items.exists()):
-            return Response('Item nao cadastrado no sistema' + request.data['rfid'], 404)
+            return Response('Item nao cadastrado no sistema ' + request.data['rfid'], 404)
         if not(orders.exists()):
            models.Order(code=uuid4(), data=datetime.now(), customer=request.data['customer'], status='COMPRANDO').save()
            orders = models.Order.objects.filter(status__exact='COMPRANDO', customer__exact=request.data['customer'])
