@@ -1,2 +1,2 @@
 release: cd market_api && python manage.py migrate
-web: gunicorn config.wsgi --log-file=-
+web: gunicorn market_api.config.wsgi --log-file=-
