@@ -24,7 +24,7 @@ class ItemOrderViewSet(ModelViewSet):
         customer = models.Customer.objects.get(pk=request.data['customer'])
         orders = models.Order.objects.filter(status__exact='COMPRANDO', customer__exact=customer)
         if not(orders.exists()):
-           models.Order(code=uuid4(), data=datetime.now(), customer=request.data['customer'], status='COMPRANDO').save()
+           models.Order(code=uuid4(), data=datetime.now(), customer=customer, status='COMPRANDO').save()
            orders = models.Order.objects.filter(status__exact='COMPRANDO', customer__exact=request.data['customer'])
         item = items.first()
         order = orders.first()
