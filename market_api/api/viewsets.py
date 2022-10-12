@@ -1,4 +1,5 @@
 from datetime import datetime
+from urllib import response
 from uuid import uuid4
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
@@ -17,10 +18,11 @@ class ItemOrderViewSet(ModelViewSet):
     queryset = models.ItemOrder.objects.all()
 
     def create(self, request):
-        items = models.Item.objects.filter(rfid__icontains=request.data['rfid'])
-        orders = models.Order.objects.filter(status__exact='COMPRANDO', customer__exact=request.data['customer'])
+        items = models.Item.objects.filter(rfid__exact=request.data['rfid'])
         if not(items.exists()):
             return Response('Item nao cadastrado no sistema ' + request.data['rfid'], 404)
+        customer = models.Customer.objects.get(pk=request.data['customer'])
+        orders = models.Order.objects.filter(status__exact='COMPRANDO', customer__exact=customer)
         if not(orders.exists()):
            models.Order(code=uuid4(), data=datetime.now(), customer=request.data['customer'], status='COMPRANDO').save()
            orders = models.Order.objects.filter(status__exact='COMPRANDO', customer__exact=request.data['customer'])
