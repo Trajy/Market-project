@@ -17,7 +17,7 @@ class ItemOrderViewSet(ModelViewSet):
     queryset = models.ItemOrder.objects.all()
 
     def create(self, request):
-        items = models.Item.objects.filter(rfid__exact=request.data['rfid'])
+        items = models.Item.objects.filter(rfid__icontains=request.data['rfid'])
         orders = models.Order.objects.filter(status__exact='COMPRANDO', customer__exact=request.data['customer'])
         if not(items.exists()):
             return Response('Item nao cadastrado no sistema' + request.data['rfid'], 404)
