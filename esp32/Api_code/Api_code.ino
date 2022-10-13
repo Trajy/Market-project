@@ -65,8 +65,7 @@ String lerTag() {
         delay(5);
         text += (char)rfid.read();
     }
-    if (text.length() > 20)
-    return text.substring(1,11);
+    if (text.length() > 20) return text.substring(1,11);
 }
 
 void setup() {
@@ -84,9 +83,7 @@ void setup() {
 }
 
 void loop() {
-    if(!rfid.available() > 0) {
-        return;
-    }
+    if(!rfid.available() > 0) return;
     String tag = lerTag();
     String body;
     String path;
