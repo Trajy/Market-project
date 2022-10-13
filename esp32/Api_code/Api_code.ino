@@ -9,8 +9,8 @@
 #define API_URL String("http://market-api-tcc.herokuapp.com")
 
 // Informe as credencias da sua rede wifi
-const char* ssid = "Mortadela 2.4";
-const char* password = "7890048678900486";
+const char* ssid = "";
+const char* password = "";
 String pedidoId;
 HTTPClient http;
 SoftwareSerial rfid(5,4); // (RX, TX)
@@ -85,7 +85,7 @@ void setup() {
 
 void loop() {
     if(!rfid.available() > 0) {
-      return;
+        return;
     }
     String tag = lerTag();
     String body;
@@ -97,9 +97,9 @@ void loop() {
         patch(body, path);
     }
     else if(tag == TAG_PEDIDO_CANCELADO) {
-      body = "{\"status\":\"CANCELADO\"}";
-      path = "/orders/"+ pedidoId + "/";
-      patch(body, path);
+        body = "{\"status\":\"CANCELADO\"}";
+        path = "/orders/"+ pedidoId + "/";
+        patch(body, path);
     }
     else {
         body = "{\"rfid\":\"" + tag + "\",\"customer\":\"" + ID_ARDUINO + "\"}";
