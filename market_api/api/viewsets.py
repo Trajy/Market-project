@@ -1,5 +1,4 @@
 from datetime import datetime
-from urllib import response
 from uuid import uuid4
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
@@ -11,7 +10,18 @@ class ItemViewSet(ModelViewSet):
 
 class OrderViewSet(ModelViewSet):
     serializer_class = serializers.OrderSerializer
-    queryset = models.Order.objects.filter(status__exact='COMPRANDO').all()
+    queryset = models.Order.objects.all()
+
+    def list(self, request):
+        status = request.query_params.get('status')
+        customer_id =  request.query_params.get('customer')
+        if (status != None and customer_id != None):
+            customer = models.Customer.objects.get(pk=customer_id)
+            orders = models.Order.objects.filter(status__exact=status, customer__exact=customer)
+            if (orders.exists()):
+                 return Response(serializers.OrderSerializer(orders.first()).data)
+            return Response(f'Nenhum pedido com status {status}')
+        return super().list(request)
 
 class ItemOrderViewSet(ModelViewSet):
     serializer_class = serializers.ItemOrderSerializer
