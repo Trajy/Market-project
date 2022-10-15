@@ -44,8 +44,14 @@ class ItemOrderViewSet(ModelViewSet):
            orders = models.Order.objects.filter(status__exact='COMPRANDO', customer__exact=request.data['customer'])
         item = items.first()
         order = orders.first()
-        itemOrder = models.ItemOrder.objects.create(item=item, order=order, quantity=1)
-        return Response(serializers.ItemOrderSerializer(itemOrder).data)
+        item_orders = models.ItemOrder.objects.filter(item__exact=item, order__exact=order)
+        if(item_orders.exists()):
+            item_order = item_orders.first()
+            item_order.quantity += 1
+            item_order.save()
+        else:
+            item_order = models.ItemOrder.objects.create(item=item, order=order, quantity=1)
+        return Response(serializers.ItemOrderSerializer(item_order).data)
 
 class CustomerViewSet(ModelViewSet):
     serializer_class = serializers.CustomerSerializer
@@ -55,4 +61,10 @@ class CustomerViewSet(ModelViewSet):
         customer = models.Customer.objects.create(name=request.data['name'])
         customer.save()
         return Response(serializers.CustomerSerializer(customer).data)
+
+class RelatoryViewSet(ModelViewSet):
+
+    def list(self, request):
+        order = models.Order.objects.filter(status__exact='COMPRANDO', customer__exact=request.data['customer']).first()
+        item_ids = models.ItemOrder.objects.values_list()
  
