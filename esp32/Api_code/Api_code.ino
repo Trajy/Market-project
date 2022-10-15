@@ -9,8 +9,8 @@
 #define API_URL String("http://market-api-tcc.herokuapp.com")
 
 // Informe as credencias da sua rede wifi
-const char* ssid = "";
-const char* password = "";
+const char* ssid = "Mortadela 2.4";
+const char* password = "7890048678900486";
 String pedidoId;
 HTTPClient http;
 SoftwareSerial rfid(5,4); // (RX, TX)
@@ -59,6 +59,20 @@ void patch(String body, String path) {
     }
 }
 
+boolean naoTemPedido() {
+    if(pedidoId != NULL) return false;
+    String path = "/orders/?status=COMPRANDO&customer=" + String(ID_ARDUINO);
+    Serial.println("Checando se existe pedido");
+    prepararRequest(path);
+    http.GET();
+    String resposta = http.getString();
+    deserializeJson(doc, resposta);
+    Serial.println(resposta);
+    JsonObject obj = doc.as<JsonObject>();
+    if(obj.containsKey("id")) pedidoId = obj["id"].as<String>();
+    return !obj.containsKey("id");
+}
+
 String lerTag() {
     String text = "";
     while (rfid.available() > 0) {
@@ -89,11 +103,19 @@ void loop() {
     String path;
     digitalWrite(LED_BUILTIN, HIGH);
     if(tag == TAG_PEDIDO_FINALIZADO) {
+        if(naoTemPedido()){
+          Serial.println("Não há pedido para finalizar");
+          return;
+        }
         body = "{\"status\":\"FINALIZADO\"}";
         path = "/orders/" + pedidoId + "/";
         patch(body, path);
     }
     else if(tag == TAG_PEDIDO_CANCELADO) {
+        if(naoTemPedido()){
+          Serial.println("Não há pedido para cancelar");
+          return;
+        }
         body = "{\"status\":\"CANCELADO\"}";
         path = "/orders/"+ pedidoId + "/";
         patch(body, path);
