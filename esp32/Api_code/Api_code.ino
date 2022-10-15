@@ -4,6 +4,7 @@
 #include <ArduinoJson.h>
 
 #define ID_ARDUINO 1
+#define TAG_INICIAR_PEDIDO String("39008059B1")
 #define TAG_PEDIDO_CANCELADO String("3A007CDE0D")
 #define TAG_PEDIDO_FINALIZADO String("3900805A05")
 #define API_URL String("http://market-api-tcc.herokuapp.com")
@@ -107,6 +108,7 @@ void loop() {
           Serial.println("Não há pedido para finalizar");
           return;
         }
+        Serial.println("Finalizando Pedido");
         body = "{\"status\":\"FINALIZADO\"}";
         path = "/orders/" + pedidoId + "/";
         patch(body, path);
@@ -116,12 +118,19 @@ void loop() {
           Serial.println("Não há pedido para cancelar");
           return;
         }
+        Serial.println("Cancelando Pedido");
         body = "{\"status\":\"CANCELADO\"}";
         path = "/orders/"+ pedidoId + "/";
         patch(body, path);
     }
+    else if (tag == TAG_INICIAR_PEDIDO){
+        Serial.println("Iniciando Pedido");
+        body = "{\"customer\":\"" + String(ID_ARDUINO) + "\"}";
+        path = "/orders/";
+        post(body, path);
+    }
     else {
-        body = "{\"rfid\":\"" + tag + "\",\"customer\":\"" + ID_ARDUINO + "\"}";
+        body = "{\"rfid\":\"" + tag + "\",\"customer\":\"" + String(ID_ARDUINO) + "\"}";
         Serial.println("BODY: " + body);
         path = "/items-orders/";
         post(body, path);
