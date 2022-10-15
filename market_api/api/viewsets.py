@@ -22,6 +22,12 @@ class OrderViewSet(ModelViewSet):
                  return Response(serializers.OrderSerializer(orders.first()).data)
             return Response(f'Nenhum pedido com status {status}')
         return super().list(request)
+    
+    def create(self, request):
+        customer = models.Customer.objects.get(pk=request.data['customer'])
+        order = models.Order(code=uuid4(), data=datetime.now().date(), customer=customer, status='COMPRANDO')
+        order.save()
+        return Response(serializers.OrderSerializer(order).data)
 
 class ItemOrderViewSet(ModelViewSet):
     serializer_class = serializers.ItemOrderSerializer
