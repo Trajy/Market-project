@@ -23,6 +23,7 @@ route.register(r'items', viewsets.ItemViewSet, basename='items')
 route.register(r'orders', viewsets.OrderViewSet, basename='0rders')
 route.register(r'items-orders', viewsets.ItemOrderViewSet, basename='items-orders')
 route.register(r'customers', viewsets.CustomerViewSet, basename='customers')
+route.register(r'relatory', viewsets.RelatoryViewSet, basename='relatory')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

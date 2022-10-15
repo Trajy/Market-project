@@ -1,4 +1,6 @@
 from datetime import datetime
+from re import sub
+import string
 from uuid import uuid4
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
@@ -65,6 +67,26 @@ class CustomerViewSet(ModelViewSet):
 class RelatoryViewSet(ModelViewSet):
 
     def list(self, request):
-        order = models.Order.objects.filter(status__exact='COMPRANDO', customer__exact=request.data['customer']).first()
-        item_ids = models.ItemOrder.objects.values_list()
+        order = models.Order.objects.filter(status__exact='COMPRANDO', customer__exact=request.query_params.get('customer')).first()
+        items_orders_queryset = models.ItemOrder.objects.filter(order__exact=order)
+        item_ids = list(items_orders_queryset.values_list('item'))
+        items_relatory = list()
+        for id in item_ids:
+            id_str = sub("[^0-9]", "", str(id))
+            item = models.Item.objects.get(pk=str(id_str))
+            item_relatory = {
+                'id': item.id,
+                'name': item.name,
+                'quantity': models.ItemOrder.objects.filter(item__exact=id_str, order__exact=order).first().quantity
+            }
+            items_relatory.append(item_relatory)
+        relatory = {
+            'id': order.id,
+            'code': order.code,
+            'data': order.data, 
+            'customer': order.customer.id,
+            "status": order.status,
+            'items': items_relatory
+        }
+        return Response(relatory)
  
